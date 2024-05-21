@@ -4,21 +4,12 @@ from multiprocessing import Pool
 from scapy.all import (Ether, ARP, srp)
 
 def get_subnet(ip: str) -> str:
-    """Get the subnet of the target IP address
-    
-    :param ip: The target IP address
-    :return: The subnet of the target IP address
-    """
+    """Get the subnet of the target IP address"""
     splitted_ip = ip.split(".")
     return f"{splitted_ip[0]}.{splitted_ip[1]}.{splitted_ip[2]}"
 
 def get_device_adresses(ip: str, printing: bool = False) -> tuple[str, str] | None:
-    """Get the MAC address of the target IP address using ARP request
-    
-    :param ip: The target IP address
-    :param printing: Whether to print the output
-    :return: A tuple of the target IP address and its MAC address
-    """
+    """Get the MAC address of the target IP address using ARP request"""
     packet = Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(op="who-has", pdst=ip)
     print("[*]Sending ARP request to", ip) if printing else None
     answered, _ = srp(packet, timeout=2, retry= 0, verbose=False)
