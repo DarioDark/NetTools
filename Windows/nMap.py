@@ -5,7 +5,7 @@ from scapy.all import (Ether, ARP, srp)
 
 def get_subnet(ip: str) -> str:
     """Get the subnet of the target IP address"""
-    splitted_ip = ip.split(".")
+    splitted_ip: list = ip.split(".")
     return f"{splitted_ip[0]}.{splitted_ip[1]}.{splitted_ip[2]}"
 
 def get_mac(ip: str, printing: bool = False) -> str | None:
@@ -21,14 +21,14 @@ def get_mac(ip: str, printing: bool = False) -> str | None:
 def nMap(ip: str) -> list[str] | None:
     """Scan the subnet for all devices"""
     print("[*]Scanning the subnet for all devices...")
-    subnet_ips = [f"{get_subnet(ip)}.{i}" for i in range(1, 255)]
-    chunk_size = 60  # Smaller chunk size to avoid exceeding the handle limit
-    results = []
+    subnet_ips: list[str] = [f"{get_subnet(ip)}.{i}" for i in range(1, 255)]
+    chunk_size: int = 60  # Smaller chunk size to avoid exceeding the handle limit
+    results: list = []
 
     with Pool(processes=chunk_size) as pool:
         for i in range(0, len(subnet_ips), chunk_size):
             chunk = subnet_ips[i:i + chunk_size]
-            result = pool.map(get_mac, chunk)
+            result: map = pool.map(get_mac, chunk)
             results.extend(result)
             
     pool.join()
